@@ -8,29 +8,35 @@
 import SwiftUI
 import YYCache
 
-let cache = Cache(name: "MyCache")
 
 struct ContentView: View {
     @State var storedKey = ""
     
     @State var showAlert = false
     @State var alertText = ""
+    let cache = Cache(name: "MyCache")
     
     
     var body: some View {
         VStack {
             TextField("Stored Key", text: $storedKey)
+                .padding()
+                .textFieldStyle(.roundedBorder)
             
-            Button("Store Codable") {
+            Button {
                 let storedValue = StoreCodable()
                 // stored async with callback
                 cache?.set(key: storedKey, value: storedValue) {
                     alertText = "Stored Codable to memory and disk success\nKey: \(storedKey)\nValue: \(storedValue)"
                     showAlert.toggle()
                 }
-            }.buttonStyle(.borderedProminent)
+            } label: {
+                Text("Store Codable")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
             
-            Button("Read Codable") {
+            Button {
                 // read sync
                 if let value = cache?.get(type: StoreCodable.self, key: storedKey) {
                     alertText = "Read success\nKey: \(storedKey)\nValue: \(value)"
@@ -38,19 +44,27 @@ struct ContentView: View {
                     alertText = "Read failed with Key: \(storedKey)"
                 }
                 showAlert.toggle()
-            }.buttonStyle(.borderedProminent)
+            } label: {
+                Text("Read Codable")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
             
-            Button("Store NSCoding") {
+            Button {
                 let storedValue = StoreCoding()
                 // stored async with callback
                 cache?.set(key: storedKey, value: storedValue) {
                     alertText = "Stored NSCoding to memory and disk success\nKey: \(storedKey)\nValue: \(storedValue)"
                     showAlert.toggle()
                 }
-            }.buttonStyle(.borderedProminent)
+            } label: {
+                Text("Store NSCoding")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
                 .padding(.top)
             
-            Button("Read NSCoding") {
+            Button {
                 // read sync
                 if let value = cache?.get(type: StoreCoding.self, key: storedKey) {
                     alertText = "Read success\nKey: \(storedKey)\nValue: \(value)"
@@ -58,24 +72,33 @@ struct ContentView: View {
                     alertText = "Read failed with Key: \(storedKey)"
                 }
                 showAlert.toggle()
+            } label: {
+                Text("Read NSCoding")
+                    .frame(maxWidth: .infinity)
             }.buttonStyle(.borderedProminent)
             
-            Button("Delete Key") {
+            Button {
                 // delete async/await
                 Task {
                     await cache?.remove(key: storedKey)
-                    alertText = "Delete success\nKey: \(storedKey)"
+                    alertText = "Delete success\nKey: \(storedKey)\n"
                     showAlert.toggle()
                 }
+            } label: {
+                Text("Delete Key")
+                    .frame(maxWidth: .infinity)
             }.buttonStyle(.borderedProminent)
                 .padding(.top)
             
-            Button("Delete All") {
+            Button {
                 // delete async/await
                 cache?.removeAll {
                     alertText = "Delete All Value successed"
                     showAlert.toggle()
                 }
+            } label: {
+                Text("Delete All")
+                    .frame(maxWidth: .infinity)
             }.buttonStyle(.borderedProminent)
 
             

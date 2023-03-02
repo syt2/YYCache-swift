@@ -11,6 +11,8 @@
 		5DFE761729B04D0C00EBECDF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFE761629B04D0C00EBECDF /* ContentView.swift */; };
 		5DFE761929B04D0D00EBECDF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DFE761829B04D0D00EBECDF /* Assets.xcassets */; };
 		5DFE761C29B04D0D00EBECDF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DFE761B29B04D0D00EBECDF /* Preview Assets.xcassets */; };
+		5DFE764929B0AAB300EBECDF /* YYCache in Frameworks */ = {isa = PBXBuildFile; productRef = 5DFE764829B0AAB300EBECDF /* YYCache */; };
+		5DFE764B29B0AAE500EBECDF /* StoredDataStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFE764A29B0AAE500EBECDF /* StoredDataStruct.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,7 @@
 		5DFE761629B04D0C00EBECDF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5DFE761829B04D0D00EBECDF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5DFE761B29B04D0D00EBECDF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		5DFE764A29B0AAE500EBECDF /* StoredDataStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoredDataStruct.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DFE764929B0AAB300EBECDF /* YYCache in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,6 +55,7 @@
 		5DFE761329B04D0C00EBECDF /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				5DFE764A29B0AAE500EBECDF /* StoredDataStruct.swift */,
 				5DFE761429B04D0C00EBECDF /* ExampleApp.swift */,
 				5DFE761629B04D0C00EBECDF /* ContentView.swift */,
 				5DFE761829B04D0D00EBECDF /* Assets.xcassets */,
@@ -83,6 +88,9 @@
 			dependencies = (
 			);
 			name = Example;
+			packageProductDependencies = (
+				5DFE764829B0AAB300EBECDF /* YYCache */,
+			);
 			productName = Example;
 			productReference = 5DFE761129B04D0C00EBECDF /* Example.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +119,9 @@
 				Base,
 			);
 			mainGroup = 5DFE760829B04D0B00EBECDF;
+			packageReferences = (
+				5DFE764729B0AAB300EBECDF /* XCRemoteSwiftPackageReference "YYCache-Swift" */,
+			);
 			productRefGroup = 5DFE761229B04D0C00EBECDF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -137,6 +148,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DFE764B29B0AAE500EBECDF /* StoredDataStruct.swift in Sources */,
 				5DFE761729B04D0C00EBECDF /* ContentView.swift in Sources */,
 				5DFE761529B04D0C00EBECDF /* ExampleApp.swift in Sources */,
 			);
@@ -267,6 +279,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Example/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -295,6 +308,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Example/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -337,6 +351,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5DFE764729B0AAB300EBECDF /* XCRemoteSwiftPackageReference "YYCache-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/syt2/YYCache-Swift";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5DFE764829B0AAB300EBECDF /* YYCache */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DFE764729B0AAB300EBECDF /* XCRemoteSwiftPackageReference "YYCache-Swift" */;
+			productName = YYCache;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5DFE760929B04D0B00EBECDF /* Project object */;
 }

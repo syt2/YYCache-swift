@@ -11,6 +11,12 @@ struct StoreCodable: Codable {
     var date: Date? = Date()
 }
 
+extension StoreCodable: CustomStringConvertible {
+    var description: String {
+        "Create @ \(date?.description ?? "unknown")"
+    }
+}
+
 class StoreCoding: NSObject, NSCoding {
     func encode(with coder: NSCoder) {
         coder.encode(date, forKey: "date")
@@ -24,5 +30,11 @@ class StoreCoding: NSObject, NSCoding {
     
     override init() {
         super.init()
+    }
+}
+
+extension StoreCoding {
+    override var description: String {
+        "Create @ \(date?.description ?? "unknown")"
     }
 }

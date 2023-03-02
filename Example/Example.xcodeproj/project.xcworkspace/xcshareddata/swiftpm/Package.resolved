@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "yycache-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/syt2/YYCache-Swift",
+      "state" : {
+        "branch" : "main",
+        "revision" : "3de25e980fd7e561881c8b926d82eb6b29d1149d"
+      }
+    }
+  ],
+  "version" : 2
+}
