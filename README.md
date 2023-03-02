@@ -52,7 +52,7 @@ cache?.removeAll { }
 
 // asynchronized functions for iOS 13+
 Task {
-    let cachedValue = await cache?.getAsync(type: MyCacheValue.self, key: "cacheKey")
+    let cachedValue = await cache?.get(type: MyCacheValue.self, key: "cacheKey")
 }
 ```
 
