@@ -7,7 +7,9 @@
 
 import Foundation
 import QuartzCore
+#if canImport(UIKit)
 import UIKit
+#endif
 
 
 ///  MemoryCache is a fast in-memory cache that stores key-value pairs.
@@ -69,14 +71,18 @@ public class MemoryCache {
     private let queue = DispatchQueue(label: "yycacheswift.memory")
 
     public init() {
+#if canImport(UIKit)
         NotificationCenter.default.addObserver(self, selector: #selector(_appDidReceiveMemoryWarningNotification), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(_appDidEnterBackgroundNotification), name: UIApplication.didEnterBackgroundNotification, object: nil)
+#endif
         _trimRecursively()
     }
     
     deinit {
+#if canImport(UIKit)
         NotificationCenter.default.removeObserver(self, name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
+#endif
     }
 }
 

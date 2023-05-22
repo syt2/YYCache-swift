@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 import CommonCrypto
 
 /// DiskCache is a thread-safe cache that stores key-value pairs backed by SQLite and file system (similar to NSURLCache's disk cache).
@@ -74,11 +73,11 @@ public class DiskCache {
     private init(path: URL, inlineThreshold: UInt) {
         self.path = path
         self.inlineThreshold = inlineThreshold
-        NotificationCenter.default.addObserver(self, selector: #selector(_appWillBeTerminated), name: UIApplication.willTerminateNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(_appWillBeTerminated), name: willTerminateNotificationName, object: nil)
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: UIApplication.willTerminateNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: willTerminateNotificationName, object: nil)
     }
     
     /// get cache instance
@@ -571,6 +570,7 @@ private extension DiskCache {
 
 
 // MARK: async functions
+#if swift(>=5.5)
 @available(iOS 13, *)
 public extension DiskCache {
     func contains(key: String) async -> Bool {
@@ -644,5 +644,26 @@ public extension DiskCache {
         await withUnsafeContinuation { continuation in
             trim(age: age) { continuation.resume() }
         }
+    }
+}
+#endif
+
+
+
+#if canImport(UIKit)
+import UIKit
+#endif
+#if canImport(AppKit)
+import AppKit
+#endif
+
+private extension DiskCache {
+    var willTerminateNotificationName: Notification.Name {
+#if canImport(UIKit)
+        return UIApplication.willTerminateNotification
+#endif
+#if canImport(AppKit)
+        return NSApplication.willTerminateNotification
+#endif
     }
 }

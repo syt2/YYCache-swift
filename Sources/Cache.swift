@@ -266,6 +266,7 @@ public extension Cache {
 
 
 // MARK: async functions
+#if swift(>=5.5)
 @available(iOS 13, *)
 public extension Cache {
     func contains(key: String) async -> Bool {
@@ -310,3 +311,4 @@ public extension Cache {
         }
     }
 }
+#endif

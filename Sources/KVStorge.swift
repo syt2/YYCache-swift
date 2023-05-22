@@ -7,7 +7,10 @@
 
 import Foundation
 import SQLite3
+import QuartzCore
+#if canImport(UIKit)
 import UIKit
+#endif
 
 ///  KVStorageItem is used by `KVStorage` to store key-value pair and meta data.
 struct KVStorgeItem {
@@ -114,11 +117,15 @@ class KVStorage {
     }
     
     deinit {
+#if canImport(UIKit)
         let taskId = Self.SharedApplication?.beginBackgroundTask(expirationHandler: nil)
         dbClose()
         if let taskId = taskId, taskId != .invalid {
             Self.SharedApplication?.endBackgroundTask(taskId)
         }
+#else
+        dbClose()
+#endif
     }
     
     func saveItem(_ item: KVStorgeItem) -> Bool {
@@ -925,9 +932,12 @@ private extension KVStorage {
     }
 }
 
+
+#if canImport(UIKit)
 private extension KVStorage {
     static var SharedApplication: UIApplication? {
         let isAppExtension = Bundle.main.bundlePath.hasSuffix(".appex")
         return isAppExtension ? nil : UIApplication.shared
     }
 }
+#endif
