@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import UIKit
 import SQLite3
+import UIKit
 
 ///  KVStorageItem is used by `KVStorage` to store key-value pair and meta data.
 struct KVStorgeItem {

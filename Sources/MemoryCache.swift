@@ -143,13 +143,7 @@ public extension MemoryCache {
                 queue.async { self._trim(cost: self.costLimit) }
             }
             if lru.totalCount > countLimit {
-                guard let node = lru.removeTail() else { return }
-                if lru.releaseAsynchronously {
-                    (lru.releaseOnMainThread ? DispatchQueue.main : .global())
-                        .async { _ = node }
-                } else if lru.releaseOnMainThread && pthread_main_np() != 0 {
-                    DispatchQueue.main.async { _ = node }
-                }
+                lru.removeTail()
             }
         }
     }
@@ -160,38 +154,12 @@ public extension MemoryCache {
         lock.around {
             guard let node = lru.dict[key] else { return }
             lru.remove(node: node)
-            
-            if lru.releaseAsynchronously {
-                let queue = lru.releaseOnMainThread ? DispatchQueue.main : .global()
-                queue.async {
-                    _ = node
-                }
-            } else if lru.releaseOnMainThread && pthread_main_np() != 0 {
-                DispatchQueue.main.async { _ = node }
-            }
         }
     }
     
     /// Empties the cache immediately.
     func removeAll() {
         lock.around(lru.removeAll())
-    }
-    
-    
-    /// If `true`, the key-value pair will be released asynchronously to avoid blocking the access methods,
-    /// otherwise it will be released in the access method (such as remove). Default is YES.
-    var releaseAsynchronously: Bool {
-        get { lock.around(lru.releaseAsynchronously) }
-        set { lock.around(lru.releaseAsynchronously = newValue) }
-    }
-    
-    /// If `true`, the key-value pair will be released on main thread,
-    /// otherwise on background thread. Default is false.
-    /// You may set this value to `true` if the key-value object contains
-    /// the instance which should be released in main thread (such as UIView/CALayer).
-    var releaseOnMainThread: Bool {
-        get { lock.around(lru.releaseOnMainThread) }
-        set { lock.around(lru.releaseOnMainThread = newValue)}
     }
     
 }
@@ -246,19 +214,15 @@ private extension MemoryCache {
         }
         
         if finish { return }
-        var holder = [Any]()
         repeat {
             lock.tryAround {
                 if lru.totalCost > costLimit {
-                    if let tail = lru.removeTail() { holder.append(tail) }
+                    lru.removeTail()
                 } else {
                     finish = true
                 }
             }
         } while !finish
-        if holder.isEmpty { return }
-        (lru.releaseOnMainThread ? DispatchQueue.main : .global())
-            .async { _ = holder }
     }
     
     func _trim(count: UInt) {
@@ -271,19 +235,15 @@ private extension MemoryCache {
         }
         
         if finish { return }
-        var holder = [Any]()
         repeat {
             lock.tryAround {
                 if lru.totalCount > countLimit {
-                    if let tail = lru.removeTail() { holder.append(tail) }
+                    lru.removeTail()
                 } else {
                     finish = true
                 }
             }
         } while !finish
-        if holder.isEmpty { return }
-        (lru.releaseOnMainThread ? DispatchQueue.main : .global())
-            .async { _ = holder }
     }
 
     func _trim(age: TimeInterval) {
@@ -298,19 +258,15 @@ private extension MemoryCache {
         }
         
         if finish { return }
-        var holder = [Any]()
         repeat {
             lock.tryAround {
                 if let tail = lru.tail, now - tail.time > ageLimit {
-                    if let tail = lru.removeTail() { holder.append(tail) }
+                    lru.removeTail()
                 } else {
                     finish = true
                 }
             }
         } while !finish
-        if holder.isEmpty { return }
-        (lru.releaseOnMainThread ? DispatchQueue.main : .global())
-            .async { _ = holder }
     }
     
     @objc func _appDidReceiveMemoryWarningNotification() {
@@ -362,9 +318,6 @@ fileprivate class LinkMap {
     var totalCount: UInt = 0
     weak var head: LinkedMapNode?
     weak var tail: LinkedMapNode?
-    
-    var releaseOnMainThread: Bool = false
-    var releaseAsynchronously: Bool = true
 
     init() { }
 
@@ -411,14 +364,6 @@ fileprivate class LinkMap {
         totalCount = 0
         head = nil
         tail = nil
-        guard dict.count > 0 else { return }
-        let holder = dict
         dict = [:]
-        if releaseAsynchronously {
-            (releaseOnMainThread ? DispatchQueue.main : .global())
-                .async { _ = holder }
-        } else if releaseOnMainThread && pthread_main_np() != 0 {
-            DispatchQueue.main.async { _ = holder }
-        }
     }
 }
