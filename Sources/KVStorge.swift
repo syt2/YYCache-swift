@@ -215,14 +215,16 @@ class KVStorage {
         var success = false
         let perCount = 16
         repeat {
-            items = dbGetItemSizeInfoOrderByTimeAsc(limit: perCount)
-            items?.forEach { item in
-                guard total > size, success else { return }
+            guard let items = dbGetItemSizeInfoOrderByTimeAsc(limit: perCount)
+            else { continue }
+            for item in items {
+                guard total > size else { break }
                 if let filename = item.filename {
                     fileDelete(filename: filename)
                 }
                 success = dbDeleteItem(key: item.key)
                 total -= item.size
+                if !success { break }
             }
         } while total > size && items?.isEmpty == false && success
         if success { dbCheckpoint() }
@@ -239,14 +241,16 @@ class KVStorage {
         var success = false
         let perCount = 16
         repeat {
-            items = dbGetItemSizeInfoOrderByTimeAsc(limit: perCount)
-            items?.forEach { item in
-                guard total > count, success else { return }
+            guard let items = dbGetItemSizeInfoOrderByTimeAsc(limit: perCount)
+            else { continue }
+            for item in items {
+                guard total > count else { break }
                 if let filename = item.filename {
                     fileDelete(filename: filename)
                 }
                 success = dbDeleteItem(key: item.key)
                 total -= 1
+                if !success { break }
             }
         } while total > count && items?.isEmpty == false && success
         if success { dbCheckpoint() }
@@ -560,7 +564,7 @@ private extension KVStorage {
         guard let stmt = dbPrepareStmt(sql: sql) else { return false }
         sqlite3_bind_text(stmt, 1, key, -1, SQLITE_TRANSIENT)
         let result = sqlite3_step(stmt)
-        if result != SQLITE_OK {
+        if result != SQLITE_DONE {
             log("sqlite delete error (\(result)): \(String(describing: sqlite3_errmsg(db)))")
             return false
         }
