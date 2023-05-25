@@ -215,8 +215,8 @@ class KVStorage {
         var success = false
         let perCount = 16
         repeat {
-            guard let items = dbGetItemSizeInfoOrderByTimeAsc(limit: perCount)
-            else { continue }
+            items = dbGetItemSizeInfoOrderByTimeAsc(limit: perCount)
+            guard let items else { continue }
             for item in items {
                 guard total > size else { break }
                 if let filename = item.filename {
@@ -241,8 +241,8 @@ class KVStorage {
         var success = false
         let perCount = 16
         repeat {
-            guard let items = dbGetItemSizeInfoOrderByTimeAsc(limit: perCount)
-            else { continue }
+            items = dbGetItemSizeInfoOrderByTimeAsc(limit: perCount)
+            guard let items else { continue }
             for item in items {
                 guard total > count else { break }
                 if let filename = item.filename {
